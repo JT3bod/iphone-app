@@ -18,14 +18,14 @@ public class script : MonoBehaviour {
     bool started = false;
     int ans = 0;
     bool jump = false;
-    ColorBlock correct;
-    ColorBlock incorrect;
+    bool run = true;
+    public bool idle = false;
+    int time = 0;
     
     // Use this for initialization
     void Start () {
         canvas.SetActive(false);
-        correct.normalColor = Color.green;
-        incorrect.normalColor = Color.red;
+        
 
     }
 
@@ -35,23 +35,30 @@ public class script : MonoBehaviour {
         transform.Translate(Input.acceleration.x, 0, -Input.acceleration.z);
         if (jump)
         {
-            transform.Translate(0.2f, 0.2f, 0);
+            if (time <= 20) { time++; }
+            else
+            {
+                transform.Translate(0.1f, 0.2f, 0);
+            }
+            anim.Play("jump");
         }
-        else if (transform.position.x <= 19f)
-        {
-            transform.Translate(0.1f, 0, 0);
-            anim.Play("run");
-        }
-        
         else
         {
-            anim.Play("Idle");
-            if (!started) { activate();started = true; }
-
+            if (run)
+            {
+                transform.Translate(0.1f, 0, 0);
+                anim.Play("run");
+            }
+            if (idle)
+            {
+                anim.Play("Idle");
+            }
+            checkToStop();
         }
     }
     public void activate()
     {
+       
         canvas.SetActive(true);
         int num1 = Random.Range(1, 12);
         int num2 = Random.Range(1, 12);
@@ -94,58 +101,98 @@ public class script : MonoBehaviour {
     {
         if (option1text.text == ""+ ans)
         {
-            option1.colors = correct;
+          
             jump = true;
             canvas.SetActive(false);
+            
         }
         else
         {
-            option1.colors = incorrect;
-        }
+            
+        }started = false;
     }
     public void button2Clicked()
     {
         if (option2text.text == "" + ans)
         {
-            option2.colors = correct;
+          
             jump = true;
             canvas.SetActive(false);
+            
         }
         else
         {
-            option2.colors = incorrect;
-        }
+           
+        }started = false;
     }
     public void button3Clicked()
     {
         if (option3text.text == "" + ans)
         {
-            option3.colors = correct;
+           
             jump = true; canvas.SetActive(false);
         }
         else
         {
-            option3.colors = incorrect;
+            
         }
+        started = false;
     }
     public void button4Clicked()
     {
         Debug.Log("clicked");
         if (option4text.text == "" + ans)
         {
-            option4.colors = correct;
+           
             Debug.Log("correct");
             jump = true; canvas.SetActive(false);
+            idle = false;
         }
         else
         {
-            option4.colors = incorrect;
+            
             Debug.Log("incorrect");
         }
+        started = false;
     }
     public void clicked()
     {
         Debug.Log("clicked");
     }
-    
+    private void OnCollisionEnter(Collision other)
+    {
+
+        jump = false; 
+            time = 0;
+        
+
+
+    }
+   void checkToStop()
+    {
+        if (transform.position.x >= 19f && transform.position.x <= 28f)
+        {
+            run = false;
+            idle = true; if (!started) { activate(); started = true; }
+        }
+        else if (transform.position.x >= 43f && transform.position.x <= 44f)
+        {
+            run = false;idle = true; if (!started) { activate(); started = true; }
+        }
+        else if (transform.position.x >= 67f && transform.position.x <= 69f)
+        {
+            run = false; idle = true; if (!started) { activate(); started = true; }
+        }
+        else if (transform.position.x >= 107.5f && transform.position.x <= 109f)
+        {
+            run = false; idle = true; if (!started) { activate(); started = true; }
+        }
+        else
+        {
+            run = true;
+            idle = false;
+            
+        }
+        
+    }
 }
