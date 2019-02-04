@@ -16,11 +16,16 @@ public class script : MonoBehaviour {
     public Text option4text;
     public GameObject canvas;
     bool started = false;
+    bool attacking = false;
+    public int jumps = 0;
     int ans = 0;
     bool jump = false;
+    int attacks = 0;
     bool run = true;
     public bool idle = false;
+    bool boss = false;
     int time = 0;
+   public bool complete = false;
     
     // Use this for initialization
     void Start () {
@@ -32,33 +37,55 @@ public class script : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        //transform.Translate(Input.acceleration.x, 0, -Input.acceleration.z);
-        if (jump)
-        {
-            if (time <= 20) { time++; }
-            else
-            {
-                transform.Translate(0.1f, 0.2f, 0);
-            }
-            anim.Play("jump");
-        }
+        if (complete) { }
         else
         {
-            if (run)
+            
+            //transform.Translate(Input.acceleration.x, 0, -Input.acceleration.z);
+            if (jump)
             {
-                transform.Translate(0.1f, 0, 0);
-                anim.Play("run");
+                
+                if (boss) { if (attacks == 4) { boss = false; complete = true; } else if (attacking){anim.Play("attack"); attacking = false; }{ if (!started) { activate(); started = true; attacks++; } } }
+                else
+                {
+                    if (time <= 20) { time++; }
+                    else
+                    {
+                        transform.Translate(0.1f, 0.2f, 0);
+                    }
+                    if (jumps != 4)
+                    {
+                        anim.Play("jump");
+
+                    }
+                    else
+                    {
+                        anim.Play("flip");
+
+                    }
+                }
             }
-            if (idle)
+            else
             {
-                anim.Play("Idle");
+                if (run)
+                {
+                    transform.Translate(0.1f, 0, 0);
+                    anim.Play("run");
+                }
+                if (idle)
+                {
+                    anim.Play("Idle");
+                }
+                checkToStop();
             }
-            checkToStop();
         }
     }
     public void activate()
     {
-       
+       if (jumps >= 4)
+        {
+            boss = true;
+        }
         canvas.SetActive(true);
         int num1 = Random.Range(1, 12);
         int num2 = Random.Range(1, 12);
@@ -104,7 +131,8 @@ public class script : MonoBehaviour {
           
             jump = true;
             canvas.SetActive(false);
-            
+            jumps++; attacking = true;
+
         }
         else
         {
@@ -115,10 +143,11 @@ public class script : MonoBehaviour {
     {
         if (option2text.text == "" + ans)
         {
-          
+                             
             jump = true;
             canvas.SetActive(false);
-            
+            jumps++; attacking = true;
+
         }
         else
         {
@@ -130,7 +159,7 @@ public class script : MonoBehaviour {
         if (option3text.text == "" + ans)
         {
            
-            jump = true; canvas.SetActive(false);
+            jump = true; canvas.SetActive(false); jumps++; attacking = true;
         }
         else
         {
@@ -145,8 +174,8 @@ public class script : MonoBehaviour {
         {
            
             Debug.Log("correct");
-            jump = true; canvas.SetActive(false);
-            idle = false;
+            jump = true; canvas.SetActive(false); attacking = true;
+            idle = false; jumps++;
         }
         else
         {
@@ -184,6 +213,10 @@ public class script : MonoBehaviour {
             run = false; idle = true; if (!started) { activate(); started = true; }
         }
         else if (transform.position.x >= 107.5f && transform.position.x <= 109f)
+        {
+            run = false; idle = true; if (!started) { activate(); started = true; }
+        }
+        else if (transform.position.x >= 206.5f && transform.position.x <= 208f)
         {
             run = false; idle = true; if (!started) { activate(); started = true; }
         }
