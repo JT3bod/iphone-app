@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class script : MonoBehaviour {
     public Animator anim;
+    public Animator enAnim;
     public Text question;
     public Button option1;
     public Button option2;
@@ -18,15 +21,27 @@ public class script : MonoBehaviour {
     bool started = false;
     bool attacking = false;
     public int jumps = 0;
-    int ans = 0;
+    
+    float ans = 0;
+    int ans2 = 0;
+    int ans3 = 0;
+    int ans4 = 0;
+    int choice = 0;
     bool jump = false;
     int attacks = 0;
     bool run = true;
     public bool idle = false;
+    bool en_death = false;
     bool boss = false;
     int time = 0;
+    int num1;
+    int num2;
+    int sym;
    public bool complete = false;
+    string sign = "";
+
     
+
     // Use this for initialization
     void Start () {
         canvas.SetActive(false);
@@ -37,7 +52,19 @@ public class script : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (complete) { }
+        if (en_death)
+        {
+            if (time != 0)
+            {
+                time--;
+            }
+            else
+            {
+                enAnim.Play("en_Death");
+                transform.Translate((Input.acceleration.x), 0, 0);
+            }
+        }
+        if (complete) { if (transform.position.x >= 229f){ SceneManager.LoadScene("Level1"); } }
         else
         {
             
@@ -45,7 +72,7 @@ public class script : MonoBehaviour {
             if (jump)
             {
                 
-                if (boss) { if (attacks == 4) { boss = false; complete = true; } else if (attacking){anim.Play("attack"); attacking = false; }{ if (!started) { activate(); started = true; attacks++; } } }
+                if (boss) { if (attacks == 5) { boss = false; anim.Play("attack"); en_death = true; time = 120; started = true; complete = true; } else if (attacking){ attacking = false; }{ if (!complete){ if (!started) { activate(); started = true; attacks++; } } } }
                 else
                 {
                     if (time <= 20) { time++; }
@@ -69,7 +96,7 @@ public class script : MonoBehaviour {
             {
                 if (run)
                 {
-                    transform.Translate(0.1f, 0, 0);
+                    transform.Translate((Input.acceleration.x), 0, 0);
                     anim.Play("run");
                 }
                 if (idle)
@@ -87,42 +114,15 @@ public class script : MonoBehaviour {
             boss = true;
         }
         canvas.SetActive(true);
-        int num1 = Random.Range(1, 12);
-        int num2 = Random.Range(1, 12);
-        ans = num1 + num2;
-        question.text = "What is " + num1 + " + " + num2;
-        int ans2 = Random.Range(1, 20);
-        int ans3 = Random.Range(1, 20);
-        int ans4 = Random.Range(1, 20);
-        int choice = Random.Range(1, 4);
-        if (choice == 1)
-        {
-            option1text.text = "" + ans;
-            option2text.text = "" + ans2;
-            option3text.text = "" + ans3;
-            option4text.text = "" + ans4;
-        }
-        if (choice == 2)
-        {
-            option1text.text = "" + ans2;
-            option2text.text = "" + ans;
-            option3text.text = "" + ans3;
-            option4text.text = "" + ans4;
-        }
-        if (choice == 3)
-        {
-            option1text.text = "" + ans2;
-            option2text.text = "" + ans3;
-            option3text.text = "" + ans;
-            option4text.text = "" + ans4;
-        }
-        if (choice == 4)
-        {
-            option1text.text = "" + ans2;
-            option2text.text = "" + ans3;
-            option3text.text = "" + ans4;
-            option4text.text = "" + ans;
-        }
+        //Generates the two numbers
+        num1 = UnityEngine.Random.Range(1, 12);
+        num2 = UnityEngine.Random.Range(1, 12);
+        //chooses the numerical symbol
+        sym = UnityEngine.Random.Range(1, 5);
+        generateNum();
+        Debug.Log(sym);
+        
+        
     }
     public void button1Clicked()
     {
@@ -226,6 +226,97 @@ public class script : MonoBehaviour {
             idle = false;
             
         }
+       
         
+    }
+    void generateNum() {
+        if (sym == 1)
+        {
+            sign = "+";
+            ans = num1 + num2;
+
+        }
+        else if (sym == 2)
+        {
+            sign = "-";
+            ans = num1 - num2;
+            if (ans <= 0)
+            {
+                num1++;
+                generateNum();
+            }
+
+        }
+        else if (sym == 3)
+        {
+            sign = "/";
+            ans = num1 / num2;
+            
+            if (ans < 1)
+            {
+                num2--;
+                generateNum();
+            }
+            if ((num2 % num1) != 0)
+            {
+                num1--;
+                generateNum();
+            }
+
+        }
+        if (sym == 4)
+        {
+            sign = "x";
+            ans = num1 * num2;
+
+        }
+        question.text = ("What is : "+num1 + " "  + sign +" "+ num2);
+        int anss = (Convert.ToInt32(ans)+10);
+
+        ans2 = UnityEngine.Random.Range(1, anss);
+        ans3 = UnityEngine.Random.Range(1, anss);
+        ans4 = UnityEngine.Random.Range(1, anss);
+        if (ans2 == ans || ans2 == ans3 || ans2 == ans4)
+        {
+            ans2 = UnityEngine.Random.Range(1, anss);
+        }
+        if (ans2 == ans || ans3 == ans2 || ans3 == ans4)
+        {
+            ans3 = UnityEngine.Random.Range(1, anss);
+        }
+        if (ans4 == ans || ans4 == ans2 || ans4 == ans3)
+        {
+            ans4 = UnityEngine.Random.Range(1,anss);
+        }
+
+        choice = UnityEngine.Random.Range(1, 4);
+        if (choice == 1)
+        {
+            option1text.text = "" + ans;
+            option2text.text = "" + ans2;
+            option3text.text = "" + ans3;
+            option4text.text = "" + ans4;
+        }
+        if (choice == 2)
+        {
+            option1text.text = "" + ans2;
+            option2text.text = "" + ans;
+            option3text.text = "" + ans3;
+            option4text.text = "" + ans4;
+        }
+        if (choice == 3)
+        {
+            option1text.text = "" + ans2;
+            option2text.text = "" + ans3;
+            option3text.text = "" + ans;
+            option4text.text = "" + ans4;
+        }
+        if (choice == 4)
+        {
+            option1text.text = "" + ans2;
+            option2text.text = "" + ans3;
+            option3text.text = "" + ans4;
+            option4text.text = "" + ans;
+        }
     }
 }
