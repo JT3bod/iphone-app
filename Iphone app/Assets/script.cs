@@ -21,7 +21,7 @@ public class script : MonoBehaviour {
     bool started = false;
     bool attacking = false;
     public int jumps = 0;
-    
+    System.Random r = new System.Random();
     float ans = 0;
     int ans2 = 0;
     int ans3 = 0;
@@ -96,7 +96,7 @@ public class script : MonoBehaviour {
             {
                 if (run)
                 {
-                    transform.Translate((Input.acceleration.x), 0, 0);
+                    transform.Translate((1f), 0, 0);
                     anim.Play("run");
                 }
                 if (idle)
@@ -115,10 +115,10 @@ public class script : MonoBehaviour {
         }
         canvas.SetActive(true);
         //Generates the two numbers
-        num1 = UnityEngine.Random.Range(1, 12);
-        num2 = UnityEngine.Random.Range(1, 12);
+        num1 = r.Next(1, 12);
+        num2 = r.Next(1, 12);
         //chooses the numerical symbol
-        sym = UnityEngine.Random.Range(1, 5);
+        sym = r.Next(1, 5);
         generateNum();
         Debug.Log(sym);
         
@@ -273,23 +273,23 @@ public class script : MonoBehaviour {
         question.text = ("What is : "+num1 + " "  + sign +" "+ num2);
         int anss = (Convert.ToInt32(ans)+10);
 
-        ans2 = UnityEngine.Random.Range(1, anss);
-        ans3 = UnityEngine.Random.Range(1, anss);
-        ans4 = UnityEngine.Random.Range(1, anss);
+        ans2 = r.Next(1, anss);
+        ans3 = r.Next(1, anss);
+        ans4 = r.Next(1, anss);
         if (ans2 == ans || ans2 == ans3 || ans2 == ans4)
         {
-            ans2 = UnityEngine.Random.Range(1, anss);
+            ans2 = r.Next(1, anss);
         }
         if (ans2 == ans || ans3 == ans2 || ans3 == ans4)
         {
-            ans3 = UnityEngine.Random.Range(1, anss);
+            ans3 = r.Next(1, anss);
         }
         if (ans4 == ans || ans4 == ans2 || ans4 == ans3)
         {
-            ans4 = UnityEngine.Random.Range(1,anss);
+            ans4 = r.Next(1,anss);
         }
 
-        choice = UnityEngine.Random.Range(1, 4);
+        choice = r.Next(1, 4);
         if (choice == 1)
         {
             option1text.text = "" + ans;
