@@ -58,14 +58,7 @@ public class script : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (phone)
-        {
-            acceleration = Input.acceleration.x;
-        }
-        else
-        {
-            acceleration = 0.15f;
-        }
+        
         if (en_death)
         {
             if (time != 0)
@@ -109,6 +102,14 @@ public class script : MonoBehaviour {
             }
             else
             {
+                if (phone)
+                {
+                    acceleration = Input.acceleration.x;
+                }
+                else
+                {
+                    acceleration = 0.15f;
+                }
                 if (run)
                 {
                     transform.Translate((acceleration), 0, 0);
