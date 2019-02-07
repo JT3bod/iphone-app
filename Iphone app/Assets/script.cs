@@ -78,7 +78,7 @@ public class script : MonoBehaviour {
                     if (time <= 20) { time++; }
                     else
                     {
-                        transform.Translate(0.1f, 0.2f, 0);
+                        transform.Translate(0.1f, 0.4f, 0);
                     }
                     if (jumps != 4)
                     {
@@ -96,7 +96,7 @@ public class script : MonoBehaviour {
             {
                 if (run)
                 {
-                    transform.Translate((1f), 0, 0);
+                    transform.Translate((Input.acceleration.x), 0, 0);
                     anim.Play("run");
                 }
                 if (idle)
