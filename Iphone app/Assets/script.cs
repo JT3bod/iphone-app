@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class script : MonoBehaviour {
     public Animator anim;
+    public Slider health;
+    bool Sclicked = false;
     public Animator enAnim;
     public Text question;
     public Button option1;
@@ -18,9 +20,10 @@ public class script : MonoBehaviour {
     public Text option3text;
     public Text option4text;
     public GameObject canvas;
+    public GameObject settingcanvas;
     bool started = false;
     bool attacking = false;
-    public int jumps = 0;
+    int jumps = 0;
     System.Random r = new System.Random();
     float ans = 0;
     int ans2 = 0;
@@ -30,28 +33,39 @@ public class script : MonoBehaviour {
     bool jump = false;
     int attacks = 0;
     bool run = true;
-    public bool idle = false;
+    bool idle = false;
     bool en_death = false;
     bool boss = false;
     int time = 0;
     int num1;
     int num2;
     int sym;
-   public bool complete = false;
+    bool complete = false;
+    public float acceleration;
     string sign = "";
+    public bool phone = true;
 
     
 
     // Use this for initialization
     void Start () {
         canvas.SetActive(false);
-        
+        settingcanvas.SetActive(false);
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (phone)
+        {
+            acceleration = Input.acceleration.x;
+        }
+        else
+        {
+            acceleration = 0.15f;
+        }
         if (en_death)
         {
             if (time != 0)
@@ -61,24 +75,24 @@ public class script : MonoBehaviour {
             else
             {
                 enAnim.Play("en_Death");
-                transform.Translate((Input.acceleration.x), 0, 0);
+                transform.Translate((acceleration), 0, 0);
             }
         }
         if (complete) { if (transform.position.x >= 229f){ SceneManager.LoadScene("Level1"); } }
         else
         {
             
-            //transform.Translate(Input.acceleration.x, 0, -Input.acceleration.z);
+            //transform.Translate(acceleration, 0, -Input.acceleration.z);
             if (jump)
             {
                 
-                if (boss) { if (attacks == 5) { boss = false; anim.Play("attack"); en_death = true; time = 120; started = true; complete = true; } else if (attacking){ attacking = false; }{ if (!complete){ if (!started) { activate(); started = true; attacks++; } } } }
+                if (boss) { if (attacks == 5) { boss = false; anim.Play("attack"); en_death = true; time = 85; started = true; attacking = false; complete = true; } else if (attacking){ attacking = false; }{ if (!complete){ if (!started) { activate(); started = true; attacks++; } } } }
                 else
                 {
                     if (time <= 20) { time++; }
                     else
                     {
-                        transform.Translate(0.1f, 0.4f, 0);
+                        transform.Translate(0.1f, 0.25f, 0);
                     }
                     if (jumps != 4)
                     {
@@ -88,6 +102,7 @@ public class script : MonoBehaviour {
                     else
                     {
                         anim.Play("flip");
+                        
 
                     }
                 }
@@ -96,7 +111,7 @@ public class script : MonoBehaviour {
             {
                 if (run)
                 {
-                    transform.Translate((Input.acceleration.x), 0, 0);
+                    transform.Translate((acceleration), 0, 0);
                     anim.Play("run");
                 }
                 if (idle)
@@ -114,13 +129,9 @@ public class script : MonoBehaviour {
             boss = true;
         }
         canvas.SetActive(true);
-        //Generates the two numbers
-        num1 = r.Next(1, 12);
-        num2 = r.Next(1, 12);
-        //chooses the numerical symbol
-        sym = r.Next(1, 5);
         generateNum();
-        Debug.Log(sym);
+       
+      
         
         
     }
@@ -136,8 +147,9 @@ public class script : MonoBehaviour {
         }
         else
         {
-            
-        }started = false;
+            WrongAnswer();
+        }
+        started = false;
     }
     public void button2Clicked()
     {
@@ -151,8 +163,9 @@ public class script : MonoBehaviour {
         }
         else
         {
-           
-        }started = false;
+            WrongAnswer();
+        }
+        started = false;
     }
     public void button3Clicked()
     {
@@ -163,24 +176,23 @@ public class script : MonoBehaviour {
         }
         else
         {
-            
+            WrongAnswer();
         }
         started = false;
     }
     public void button4Clicked()
     {
-        Debug.Log("clicked");
+        
         if (option4text.text == "" + ans)
         {
            
-            Debug.Log("correct");
             jump = true; canvas.SetActive(false); attacking = true;
             idle = false; jumps++;
         }
         else
         {
-            
-            Debug.Log("incorrect");
+
+            WrongAnswer();
         }
         started = false;
     }
@@ -230,6 +242,9 @@ public class script : MonoBehaviour {
         
     }
     void generateNum() {
+        num1 = r.Next(1, 12);
+        num2 = r.Next(1, 12);
+        sym = r.Next(1, 5);
         if (sym == 1)
         {
             sign = "+";
@@ -240,53 +255,45 @@ public class script : MonoBehaviour {
         {
             sign = "-";
             ans = num1 - num2;
-            if (ans <= 0)
+            while (ans <= 0)
             {
-                num1++;
-                generateNum();
+                int temp = num1;
+                num2 = num1;
+                num1 = temp;
+                ans = num1 - num2;
             }
 
         }
         else if (sym == 3)
+
         {
             sign = "/";
-            ans = num1 / num2;
-            
-            if (ans < 1)
-            {
-                num2--;
-                generateNum();
-            }
-            if ((num2 % num1) != 0)
-            {
-                num1--;
-                generateNum();
-            }
+            int temp= num1;
+            ans = num1;
+            num1 = temp * num2;
 
         }
-        if (sym == 4)
+        else if (sym == 4)
         {
             sign = "x";
             ans = num1 * num2;
 
         }
-        question.text = ("What is : "+num1 + " "  + sign +" "+ num2);
-        int anss = (Convert.ToInt32(ans)+10);
-
-        ans2 = r.Next(1, anss);
-        ans3 = r.Next(1, anss);
-        ans4 = r.Next(1, anss);
+        question.text = ("What is : " + num1 + " " + sign + " " + num2);
+        ans2 = r.Next(1, 50);
+        ans3 = r.Next(1, 50);
+        ans4 = r.Next(1, 50);
         if (ans2 == ans || ans2 == ans3 || ans2 == ans4)
         {
-            ans2 = r.Next(1, anss);
+            ans2 = r.Next(1, 50);
         }
         if (ans2 == ans || ans3 == ans2 || ans3 == ans4)
         {
-            ans3 = r.Next(1, anss);
+            ans3 = r.Next(1, 50);
         }
         if (ans4 == ans || ans4 == ans2 || ans4 == ans3)
         {
-            ans4 = r.Next(1,anss);
+            ans4 = r.Next(1,50);
         }
 
         choice = r.Next(1, 4);
@@ -318,5 +325,37 @@ public class script : MonoBehaviour {
             option3text.text = "" + ans4;
             option4text.text = "" + ans;
         }
+
+
+
+
+        
+    }
+
+    //settings
+    public void SettingButton()
+    {
+        if (Sclicked)
+        {
+            Sclicked = false;
+            settingcanvas.SetActive(false);
+        }
+        else
+        {
+            Sclicked = true;
+            settingcanvas.SetActive(true);
+        }
+    }
+    public void PhoneButton()
+    {
+        phone = true;
+    }
+    public void PCButton()
+    {
+        phone = false;
+    }
+    void WrongAnswer()
+    {
+        health.value--;
     }
 }
