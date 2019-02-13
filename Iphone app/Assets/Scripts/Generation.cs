@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.IO;
+using System;
 public class Generation : MonoBehaviour {
-    Slider health;
     movement m;
     audioScript a;
+    TimerLevel2 t;
     GameObject canvas;
     Text question;
     Text option1;
     Text option2;
     Text option3;
     Text option4;
+    Text score;
+    string path = "Assets/Scripts/Data.txt";
+    public int scoreNum;
     int choice;
     int num1;
     int num2;
@@ -22,26 +27,33 @@ public class Generation : MonoBehaviour {
     int ans4;
     int sym;
     string sign = "";
+    public bool starttimer = false;
     System.Random r = new System.Random();
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
+
+        t = GameObject.Find("Level2Time").GetComponent<TimerLevel2>();
         a = GameObject.Find("event").GetComponent<audioScript>();
         m = GameObject.Find("Player").GetComponent<movement>();
-        health = GameObject.Find("health").GetComponent<Slider>();
+
         canvas = GameObject.Find("QuestionCanvas");
         option1 = GameObject.Find("Option1text").GetComponent<Text>();
         option2 = GameObject.Find("Option2text").GetComponent<Text>();
         option3 = GameObject.Find("Option3text").GetComponent<Text>();
         option4 = GameObject.Find("Option4text").GetComponent<Text>();
         question = GameObject.Find("Question").GetComponent<Text>();
+        score = GameObject.Find("Score").GetComponent<Text>();
         canvas.SetActive(false);
+        scoreNum = 0;
+        score.text = ("Score: " + scoreNum);
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update() {
+
+    }
     public void GenerateQuestion() {
+        t.timerStart();
         num1 = r.Next(1, 12);
         num2 = r.Next(1, 12);
         sym = r.Next(1, 5);
@@ -132,15 +144,20 @@ public class Generation : MonoBehaviour {
         Debug.Log("created question");
         canvas.SetActive(true);
     }
-    void WrongAnswer()
+
+    //scoring system and modification of health.
+    
+    void CorrectAnswer()
     {
-        health.value--; checkHealth();
+        scoreNum++; score.text = ("Score: " + scoreNum); t.timerEnd();
     }
+
+
     public void Button1Clicked()
     {
         if (option1.text == "" + ans)
         {
-            a.correctAudio();
+            a.correctAudio(); CorrectAnswer();
             m.jump = true;
             canvas.SetActive(false);
 
@@ -148,7 +165,7 @@ public class Generation : MonoBehaviour {
         }
         else
         {
-            WrongAnswer(); a.incorrectAudio();
+             a.incorrectAudio();
         }
 
     }
@@ -156,7 +173,7 @@ public class Generation : MonoBehaviour {
     {
         if (option2.text == "" + ans)
         {
-            a.correctAudio();
+            a.correctAudio(); CorrectAnswer();
             m.jump = true;
             canvas.SetActive(false);
 
@@ -164,7 +181,7 @@ public class Generation : MonoBehaviour {
         }
         else
         {
-            WrongAnswer(); a.incorrectAudio();
+             a.incorrectAudio();
         }
 
     }
@@ -172,12 +189,12 @@ public class Generation : MonoBehaviour {
     {
         if (option3.text == "" + ans)
         {
-            m.jump = true; a.correctAudio();
+            m.jump = true; a.correctAudio(); CorrectAnswer();
             canvas.SetActive(false);
         }
         else
         {
-            WrongAnswer(); a.incorrectAudio();
+             a.incorrectAudio();
         }
 
     }
@@ -186,23 +203,40 @@ public class Generation : MonoBehaviour {
 
         if (option4.text == "" + ans)
         {
-            m.jump = true; a.correctAudio();
+            m.jump = true; a.correctAudio(); CorrectAnswer();
             canvas.SetActive(false);
         }
         else
         {
             a.incorrectAudio();
-            WrongAnswer();
+            
+
         }
 
     }
-    public void checkHealth()
+    public void death()
+    { 
+        a.destructionAudio();
+        Save();
+        SceneManager.LoadScene("Menu");
+    }
+    public void Save()
     {
-        if (health.value == 0)
+        
+        string[] lines = File.ReadAllLines(path);
+        lines[0] = scoreNum.ToString();
+        if (Convert.ToInt32(lines[1]) < Convert.ToInt32(lines[0]))
         {
-            a.destructionAudio();
-            SceneManager.LoadScene("Menu");
-            
+            lines[1] = lines[0];
         }
+        LineChanger(lines[0], path, 0);
+        LineChanger(lines[1], path, 1);
+        
+    }
+    static void LineChanger(string newText, string fileName, int line_to_edit)
+    {
+        string[] arrLine = File.ReadAllLines(fileName);
+        arrLine[line_to_edit] = newText;
+        File.WriteAllLines(fileName, arrLine);
     }
 }

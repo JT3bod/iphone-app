@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4969596616663904}
   - component: {fileID: 114488465543526716}
   - component: {fileID: 114065143784648772}
-  - component: {fileID: 114598309410045714}
   - component: {fileID: 114534383128292568}
+  - component: {fileID: 114514795370512878}
   m_Layer: 0
   m_Name: event
   m_TagString: Untagged
@@ -179,6 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302eb47bfede30c4da12ea236426cfd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreNum: 0
 --- !u!114 &114488465543526716
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -190,6 +191,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c9ec11cb6ff785499147ab25c42b6d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114514795370512878
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1223063344772754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e446f73d36ae88a4a801698b5e70a1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScoreNum: 0
 --- !u!114 &114534383128292568
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -206,14 +219,3 @@ MonoBehaviour:
   incorrect: {fileID: 8300000, guid: f2cfcf1c8f17ac843a0b8693e70434a3, type: 3}
   levelComplete: {fileID: 8300000, guid: edb7126853d070745893d57e195e0938, type: 3}
   destruction: {fileID: 8300000, guid: 86de9fdb62eb8ac4ca4e4fbb2b4be0ad, type: 3}
---- !u!114 &114598309410045714
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1223063344772754}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55e435bd3654de74abba3336c862a4cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
