@@ -17,6 +17,7 @@ public class Generation : MonoBehaviour {
     Text option4;
     Text score;
     string path = "Assets/Scripts/Data.txt";
+    string path2 = "Assets/Scripts/Score.txt";
     public int scoreNum;
     int choice;
     int num1;
@@ -53,6 +54,7 @@ public class Generation : MonoBehaviour {
 
     }
     public void GenerateQuestion() {
+        t.reset();
         t.timerStart();
         num1 = r.Next(1, 12);
         num2 = r.Next(1, 12);
@@ -66,14 +68,9 @@ public class Generation : MonoBehaviour {
         else if (sym == 2)
         {
             sign = "-";
-            ans = num1 - num2;
-            while (ans <= 0)
-            {
-                int temp = num1;
-                num2 = num1;
-                num1 = temp;
-                ans = num1 - num2;
-            }
+            int temp = num1+num2;
+            ans = num1;
+            num1 = temp;
 
         }
         else if (sym == 3)
@@ -238,5 +235,13 @@ public class Generation : MonoBehaviour {
         string[] arrLine = File.ReadAllLines(fileName);
         arrLine[line_to_edit] = newText;
         File.WriteAllLines(fileName, arrLine);
+    }
+    public void updatescore()
+    {
+        string[] Lines;
+        Lines = File.ReadAllLines(path2);
+
+        scoreNum = Convert.ToInt32(Lines[0]);
+        score.text = ("Score: " + scoreNum);
     }
 }

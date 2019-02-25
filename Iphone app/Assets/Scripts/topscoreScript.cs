@@ -13,6 +13,7 @@ public class topscoreScript : MonoBehaviour {
     string[] lines;
     // Use this for initialization
     void Start () {
+        
         lines = File.ReadAllLines(path);
         lastScore = GameObject.Find("LastScore").GetComponent<Text>();
         TopScore = GameObject.Find("TopScore").GetComponent<Text>();

@@ -37,7 +37,10 @@ GameObject:
   - component: {fileID: 4442919759385108}
   - component: {fileID: 33841339178470608}
   - component: {fileID: 23682728053380596}
-  - component: {fileID: 114514627320840718}
+  - component: {fileID: 135511883737566958}
+  - component: {fileID: 114558866979577166}
+  - component: {fileID: 114495413841461966}
+  - component: {fileID: 114467421169379736}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -52,8 +55,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1529475801103436}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 281.73746, y: -1.064872, z: 4}
-  m_LocalScale: {x: 4.9759, y: 4.9759, z: 4.9759}
+  m_LocalPosition: {x: 260.2, y: -45.68935, z: 4}
+  m_LocalScale: {x: 20, y: 20, z: 4.9759}
   m_Children:
   - {fileID: 4847638074410700}
   m_Father: {fileID: 0}
@@ -125,7 +128,7 @@ Light:
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 5
-  m_Range: 10
+  m_Range: 8
   m_SpotAngle: 179
   m_CookieSize: 10
   m_Shadows:
@@ -151,7 +154,20 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &114514627320840718
+--- !u!114 &114467421169379736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1529475801103436}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e62804fe06425e48b88823d0a85da6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loaded2: 0
+  loaded3: 0
+--- !u!114 &114495413841461966
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,6 +175,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 1529475801103436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e62804fe06425e48b88823d0a85da6e, type: 3}
+  m_Script: {fileID: 11500000, guid: c8433ea48cc3b3449893157cdc13797a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loaded2: 1
+  loaded3: 0
+--- !u!114 &114558866979577166
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1529475801103436}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d48927acabe07384bb221ea4fd136658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loaded2: 1
+  loaded3: 1
+--- !u!135 &135511883737566958
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1529475801103436}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

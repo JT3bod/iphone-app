@@ -1,13 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
-    public class teleporterScript : MonoBehaviour {
+using UnityEngine.SceneManagement;
+using System.IO;
+using System;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+public class teleporterScript : MonoBehaviour {
+    public bool loaded2 = false;
+    public bool loaded3 = false;
+    Generation g;
+    string path = "Assets/Scripts/score.txt";
+    
+    
+    // Use this for initialization
+    void Start () {
+        g = GameObject.Find("event").GetComponent<Generation>();
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -15,6 +24,41 @@ using UnityEngine.SceneManagement;
 	}
     private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene("Level2"); 
+        saveScore();
+        if (!loaded2)
+        {
+            SceneManager.LoadScene("Level2");
+            loaded2 = true;
+        }
+        else if (!loaded3 && loaded2)
+        {
+            SceneManager.LoadScene("Level3");
+            loaded3 = true;
+        }
+        else
+        {
+            SceneManager.LoadScene("Menu");
+        }
+    }
+    public void Level2()
+    {
+        loaded2 = true;
+    }
+    public void level3()
+    {
+        loaded3 = true;
+        loaded2 = true;
+    }
+    public void saveScore()
+    {
+        string[] lines = File.ReadAllLines(path);
+        lines[0] = g.scoreNum.ToString();
+        LineChanger(lines[0], path, 0);
+    }
+    static void LineChanger(string newText, string fileName, int line_to_edit)
+    {
+        string[] arrLine = File.ReadAllLines(fileName);
+        arrLine[line_to_edit] = newText;
+        File.WriteAllLines(fileName, arrLine);
     }
 }

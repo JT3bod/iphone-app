@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class movement : MonoBehaviour {
     Animator anim;
+    Animator bossAnim;
+    GameObject boss;
     Generation g;
     bool stop;
     public bool paused = false;
     bool started = false;
     bool clicked;
-    public bool Phone = true;
+    public bool Phone = false;
     public bool jump;
+    public bool bossEvent;
+    int attacktime;
     int jtime;
     int time;
     float acceleration;
@@ -20,6 +24,8 @@ public class movement : MonoBehaviour {
         g = GameObject.Find("event").GetComponent<Generation>();
         Phone = true;
         clicked = false;
+        boss = GameObject.Find("Enemy");
+        bossAnim = GameObject.Find("Enemy").GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -38,22 +44,37 @@ public class movement : MonoBehaviour {
             }
             else if (jump)
             {
-                if (time <= 20) { time++; }
+                if (!bossEvent)
+                {
+                    if (time <= 20) { time++; }
+                    else
+                    {
+                        if (jtime <= 120)
+                        {
+                            transform.Translate(0.1f, 0.2f, 0); jtime++;
+                        }
+                        else
+                        {
+                            jump = false;
+                            stop = false;
+                            jtime = 0; time = 0; started = false;
+                        }
+
+                    }
+                    anim.Play("jump");
+                }
                 else
                 {
-                    if (jtime <= 120)
+                    if (attacktime > 4)
                     {
-                        transform.Translate(0.1f, 0.2f, 0); jtime++;
+                        attacktime++;
                     }
                     else
                     {
-                        jump = false;
-                        stop = false;
-                        jtime = 0; started = false;
+                        anim.Play("Attack");
+
                     }
-                    
                 }
-                anim.Play("jump");
             }
             else
             {
