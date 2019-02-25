@@ -67,7 +67,7 @@ public class movement : MonoBehaviour {
                 {
                     if (attacktime > 4)
                     {
-                        attacktime++;
+                        attacktime++; g.GenerateQuestion();
                     }
                     else
                     {
@@ -109,5 +109,9 @@ public class movement : MonoBehaviour {
         {
             Phone = true; clicked = false;
         }
+    }
+    public void BossLevel()
+    {
+        bossEvent = true;
     }
 }

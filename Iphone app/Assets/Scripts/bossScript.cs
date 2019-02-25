@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class bossScript : MonoBehaviour {
-
+    movement m;
 	// Use this for initialization
 	void Start () {
-		
+        m = GameObject.Find("Player").GetComponent<movement>();
 	}
 	
 	// Update is called once per frame
@@ -15,6 +15,6 @@ public class bossScript : MonoBehaviour {
 	}
     private void OnTriggerEnter(Collider other)
     {
-        
+        m.BossLevel();
     }
 }

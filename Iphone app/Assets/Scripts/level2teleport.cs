@@ -54,7 +54,7 @@ public class level2teleport : MonoBehaviour {
     public void saveScore()
     {
         string[] lines = File.ReadAllLines(path);
-        lines[0] = g.scoreNum.ToString();
+        lines[0] = (g.scoreNum).ToString();
         LineChanger(lines[0], path, 0);
     }
     static void LineChanger(string newText, string fileName, int line_to_edit)
