@@ -26,21 +26,8 @@ public class level3teleport : MonoBehaviour {
     }
     private void OnTriggerEnter(Collider other)
     {
-        saveScore();
-        if (!loaded2)
-        {
-            SceneManager.LoadScene("Level2");
-            loaded2 = true;
-        }
-        else if (!loaded3 && loaded2)
-        {
-            SceneManager.LoadScene("Level3");
-            loaded3 = true;
-        }
-        else
-        {
-            SceneManager.LoadScene("Menu");
-        }
+        g.Save();
+        
     }
     public void Level2()
     {
@@ -56,11 +43,29 @@ public class level3teleport : MonoBehaviour {
         string[] lines = File.ReadAllLines(path);
         lines[0] = g.scoreNum.ToString();
         LineChanger(lines[0], path, 0);
+        changescene();
     }
     static void LineChanger(string newText, string fileName, int line_to_edit)
     {
         string[] arrLine = File.ReadAllLines(fileName);
         arrLine[line_to_edit] = newText;
         File.WriteAllLines(fileName, arrLine);
+    }
+    void changescene()
+    {
+        if (!loaded2)
+        {
+            SceneManager.LoadScene("Level2");
+            loaded2 = true;
+        }
+        else if (!loaded3 && loaded2)
+        {
+            SceneManager.LoadScene("Level3");
+            loaded3 = true;
+        }
+        else
+        {
+            SceneManager.LoadScene("Menu");
+        }
     }
 }
