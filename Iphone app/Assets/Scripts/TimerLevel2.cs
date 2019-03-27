@@ -25,7 +25,7 @@ public class TimerLevel2 : MonoBehaviour {
             {
                 times = 0;
                 time.value = time.value - 10f;
-            
+                Debug.Log(time.value);
                 if (time.value == 0)
                 {
                     g.death();

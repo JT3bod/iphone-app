@@ -47,7 +47,6 @@ public class Generation : MonoBehaviour {
         canvas.SetActive(false);
         scoreNum = 0;
         score.text = ("Score: " + scoreNum);
-        updatescore();
     }
 
     // Update is called once per frame
@@ -89,7 +88,7 @@ public class Generation : MonoBehaviour {
             ans = num1 * num2;
 
         }
-        OutputQuestion(); 
+        OutputQuestion(); Debug.Log("Generated");
     }
     public void OutputQuestion()
     {
@@ -109,7 +108,7 @@ public class Generation : MonoBehaviour {
         {
             ans4 = r.Next(1, 50);
         }
-        
+        Debug.Log("Answers created");
         choice = r.Next(1, 4);
         if (choice == 1)
         {
@@ -139,7 +138,7 @@ public class Generation : MonoBehaviour {
             option3.text = "" + ans4;
             option4.text = "" + ans;
         }
-       
+        Debug.Log("created question");
         canvas.SetActive(true);
     }
 
@@ -163,7 +162,7 @@ public class Generation : MonoBehaviour {
         }
         else
         {
-             a.incorrectAudio(); scoreNum--; score.text = ("Score: " + scoreNum);
+             a.incorrectAudio();
         }
 
     }
@@ -180,7 +179,6 @@ public class Generation : MonoBehaviour {
         else
         {
              a.incorrectAudio();
-            scoreNum--; score.text = ("Score: " + scoreNum);
         }
 
     }
@@ -193,7 +191,7 @@ public class Generation : MonoBehaviour {
         }
         else
         {
-             a.incorrectAudio(); scoreNum--; score.text = ("Score: " + scoreNum);
+             a.incorrectAudio();
         }
 
     }
@@ -207,8 +205,8 @@ public class Generation : MonoBehaviour {
         }
         else
         {
-            a.incorrectAudio(); scoreNum--; score.text = ("Score: " + scoreNum);
-
+            a.incorrectAudio();
+            
 
         }
 
@@ -217,7 +215,7 @@ public class Generation : MonoBehaviour {
     { 
         a.destructionAudio();
         Save();
-        
+        SceneManager.LoadScene("Menu");
     }
     public void Save()
     {
@@ -230,7 +228,7 @@ public class Generation : MonoBehaviour {
         }
         LineChanger(lines[0], path, 0);
         LineChanger(lines[1], path, 1);
-        SceneManager.LoadScene("Menu");
+        
     }
     static void LineChanger(string newText, string fileName, int line_to_edit)
     {

@@ -8,15 +8,13 @@ public class movement : MonoBehaviour {
     GameObject boss;
     Generation g;
     bool stop;
-    bool bdeath = false;
     public bool paused = false;
     bool started = false;
     bool clicked;
-    bool flipped = false;
     public bool Phone = false;
     public bool jump;
     public bool bossEvent;
-    int attacktime = 0;
+    int attacktime;
     int jtime;
     int time;
     float acceleration;
@@ -24,7 +22,7 @@ public class movement : MonoBehaviour {
 	void Start () {
         anim = this.GetComponent<Animator>();
         g = GameObject.Find("event").GetComponent<Generation>();
-        Phone = false;
+        Phone = true;
         clicked = false;
         boss = GameObject.Find("Enemy");
         bossAnim = GameObject.Find("Enemy").GetComponent<Animator>();
@@ -35,108 +33,56 @@ public class movement : MonoBehaviour {
     {
         if (!paused)
         {
+            if (Phone) { acceleration = Input.acceleration.x; }
+            else if (!Phone) { acceleration = 0.1f; }
 
-            if (!bdeath) {
-                if (Phone) { acceleration = Input.acceleration.x; }
-                else if (!Phone) { acceleration = 0.1f; }
-
-                if (!stop)
+            if (!stop)
+            {
+                //run script
+                transform.Translate(acceleration, 0, 0);
+                anim.Play("run");
+            }
+            else if (jump)
+            {
+                if (!bossEvent)
                 {
-                    //run script
-                    transform.Translate(acceleration, 0, 0);
-                    anim.Play("run");
-                }
-                else if (jump)
-                {
-                    if (!bossEvent)
-                    {
-                        if (time <= 20) { time++; }
-                        else
-                        {
-                            if (jtime <= 120)
-                            {
-                                transform.Translate(0.1f, 0.2f, 0); jtime++;
-                            }
-                            else
-                            {
-                                jump = false;
-                                stop = false;
-                                jtime = 0; time = 0; started = false;
-                            }
-
-                        }
-                        if (flipped)
-                        {
-                            anim.Play("flip");
-                        }
-                        else
-                        {
-                            anim.Play("jump");
-                        }
-                    }
+                    if (time <= 20) { time++; }
                     else
                     {
-                        if (attacktime == 4)
+                        if (jtime <= 120)
                         {
-                            attacktime = 3;
-                            started = false;
-                        }
-                        else if (attacktime == 3)
-                        {
-                            attacktime = 2;
-                            started = false;
-                        }
-                        else if (attacktime == 2)
-                        {
-                            attacktime = 1;
-                            started = false;
-                        }
-                        else if (attacktime == 1)
-                        {
-                            attacktime = 0;
-                            started = false;
+                            transform.Translate(0.1f, 0.2f, 0); jtime++;
                         }
                         else
                         {
-                            anim.Play("attack");
-                            
-                            bdeath = true;
-                            started = true;
-                            time = 0;
+                            jump = false;
+                            stop = false;
+                            jtime = 0; time = 0; started = false;
+                        }
 
-                        }
-                        if (!started)
-                        {
-                            started = true;
-                            g.GenerateQuestion();
-                        }
                     }
+                    anim.Play("jump");
                 }
                 else
                 {
-                    anim.Play("Idle");
-                    if (!started)
+                    if (attacktime > 4)
                     {
-                        started = true;
-                        g.GenerateQuestion();
+                        attacktime++; g.GenerateQuestion();
+                    }
+                    else
+                    {
+                        anim.Play("Attack");
+
                     }
                 }
             }
             else
             {
-                if (time <= 170) { time++;  }
-                else
+                anim.Play("Idle");
+                if (!started)
                 {
-                    boss.gameObject.SetActive(false);
-                }
-                if (time >= 115)
-                {
-                    bossAnim.Play("en_Death");
-                }
-                if (time >= 170)
-                {
-                    transform.Translate(acceleration, 0, 0);
-                    anim.Play("run");
+                    started = true;
+                    g.GenerateQuestion();
                 }
             }
         }
@@ -167,9 +113,5 @@ public class movement : MonoBehaviour {
     public void BossLevel()
     {
         bossEvent = true;
-    }
-    public void flip()
-    {
-        flipped = true;
     }
 }
